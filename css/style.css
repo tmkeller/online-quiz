@@ -8,3 +8,22 @@ main {
     display: block;
     margin: 0 auto;
 }
+
+a {
+    color: #ffffff;
+}
+
+#view_scores, #timer_sec {
+    padding: 3px 6px;
+    position:fixed;
+    top: 0;
+}
+
+#view_scores {
+    left: 0;
+}
+
+#timer_sec {
+    right: 0;
+    width: 140px;
+}
