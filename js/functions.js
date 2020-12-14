@@ -104,7 +104,24 @@ function evalAnswer( bool, secPen ) {
 
 function displayEndPage() {
     headerText.textContent = "All done!";
-    answerField.textContent = `Your final score is ${ userScore }.`
+    answerField.innerHTML = `Your final score is ${ userScore }. <br>`;
+    // Create input and label.
+    var enterInitialsLabel = document.createElement( "label" );
+    var enterInitialsInput = document.createElement( "input" );
+    var enterInitialsSubmit = document.createElement( "button" );
+
+    // Add attributes.
+    enterInitialsLabel.for = "enter";
+    enterInitialsLabel.textContent = "Enter your name or initials: ";
+    enterInitialsInput.type = "text";
+    enterInitialsInput.name = "enter-initials";
+    enterInitialsInput.id = "enter-initials";
+    enterInitialsSubmit.id = "submit-initials";
+
+    // Add all elements to answerField div.
+    answerField.appendChild( enterInitialsLabel );
+    answerField.appendChild( enterInitialsInput );
+    answerField.appendChild( enterInitialsSubmit );
 }
 
 setTimer( timeSet );
