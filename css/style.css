@@ -24,6 +24,7 @@ a {
 }
 
 #timer_sec {
+    display: none;
     right: 0;
     width: 140px;
 }
