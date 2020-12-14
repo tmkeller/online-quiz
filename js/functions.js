@@ -1,7 +1,9 @@
 console.log( "functions.js successfully imported" );
 
-var timeSet = 3;
+var timeSet = 60;
+var userScore = 0;
 var quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
+var timer = document.querySelector( "#time" );
 
 function buildQuestionList() {
     var arr = [];
@@ -12,35 +14,46 @@ function buildQuestionList() {
 }
 
 // Displays the chosen question in the DOM. Written to randomize the location of the answer.
-function displayQuestion( index ) {
+function displayQuestions( index ) {
     var quizQuestion = quizQuestionsArr[ index ];
-    var keysNum = Object.keys( quizQuestion );
+    console.log( quizQuestion );
+    // Get the number of keys in the quizQuestion object minus 2, since we don't care about looping through the "answer" or "question" properties. Useful in case we want to add more answers in the future.
+    var keysNum = Object.keys( quizQuestion ).length - 2;
+    console.log( "keysNum", keysNum );
     var headerText = document.querySelector( "#header_text" );
     var answerField = document.querySelector( "#answer_field" );
+    // Empty array will hold all our answers.
     var answersArray = [];
 
-    // put all answers in answersArray so their order can be randomized without modifying the quizQuestion object.
-    for ( var i = 1; i < keysNum.length - 1; i++ ) {
+    // Put all answers in answersArray so their order can be randomized without modifying the quizQuestion object.
+    for ( var i = 0; i < keysNum; i++ ) {
         answersArray.push( quizQuestion[ i ] );
     }
+    console.log( "answersArray after for loop", answersArray );
 
     // We start on answer #1.
-    var answerNum = 1;
+    var answerNum = 0;
     while ( answersArray.length > 0 ) {
         // Randomize the order in which answers appear.
         var arrIndex = Math.floor( Math.random() * answersArray.length );
         var newButton = document.createElement( "button" );
-        newButton.textContent = `${ answerNum }. ${answersArray[ arrIndex ]}`;
+        newButton.textContent = `${ answerNum + 1 }. ${ answersArray[ arrIndex ] }`;
+        newButton.setAttribute( "data-index", answersArray[ arrIndex ] );
         answerField.appendChild( newButton );
         newButton.insertAdjacentHTML('afterend', '<br>');
+
+        // Add the event listener that handles clicks when the user "answers.""
+        newButton.addEventListener( "click", function( e ) {
+            evalAnswer( e.target.getAttribute( "data-index" ) === quizQuestion.a, 15 );
+        });
 
         answersArray.splice( arrIndex, 1 );
         answerNum++;
     }
-    console.log( answersArray );
-    console.log( `The answer is ${quizQuestion.answer}` );
+    console.log( "answersArray after while loop", answersArray );
+    console.log( `The answer is "${quizQuestion.a}"` );
 
-    headerText.textContent = quizQuestion.question;
+    headerText.textContent = quizQuestion.q;
 }
 
 function setTimer( timeSet ) {
@@ -56,13 +69,33 @@ function setTimer( timeSet ) {
             clearInterval( timerInterval );
         }
     }, 1000 );
-
 }
 
 function timerPenalty( penaltySeconds ) {
-    var timer = document.querySelector( "#time" );
-    timer.textContent -= penaltySeconds;
+    if ( timer.textContent < 15 ) {
+        timer.textContent = 0;
+    } else {
+        timer.textContent -= penaltySeconds;
+    }
+}
+
+function evalAnswer( bool, secPen ) {
+    var resultField = document.querySelector( "#question_result" );
+    if ( bool ) {
+        resultField.textContent = "Correct!";
+        userScore++;
+    } else {
+        resultField.textContent = `Incorrect. You have been penalized ${ secPen } seconds.`;
+        timerPenalty( secPen );
+    }
+
+    var timerInterval = setInterval( function( e ) {
+        // Game over
+        clearInterval( timerInterval );
+        resultField.textContent = "";
+    }, 2000 );
+
 }
 
 setTimer( timeSet );
-displayQuestion( 0 );
+displayQuestions( 0 );
