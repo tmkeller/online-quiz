@@ -1,10 +1,18 @@
-console.log( "functions.js successfully imported" );
-
+// Initial time remaining.
 var timeSet = 60;
 var userScore = 0;
-var quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
-var timer = document.querySelector( "#time" );
 
+// Create the array of questions that we will iterate over to generate the quiz.
+const quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
+
+// Constants hold all selectors for necessary HTML elements.
+const answerField = document.querySelector( "#answer_field" );
+const headerText = document.querySelector( "#header_text" );
+const resultField = document.querySelector( "#question_result" );
+const timerSection = document.querySelector( "#timer_sec" );
+const timer = document.querySelector( "#time" );
+
+// Builds the array of questions which must be iterated over to execute the quiz.
 function buildQuestionList() {
     var arr = [];
     for ( var i = 0; i < arguments.length; i++ ) {
@@ -17,13 +25,9 @@ function buildQuestionList() {
 function displayQuestion( index ) {
     var quizQuestion = quizQuestionsArr[ index ];
     // Clear the #answer_field section div of any text or questions.
-    document.querySelector( "#answer_field" ).innerHTML = "";
-    console.log( quizQuestion );
+    answerField.innerHTML = "";
     // Get the number of keys in the quizQuestion object minus 2, since we don't care about looping through the "answer" or "question" properties. Useful in case we want to add more answers in the future.
     var keysNum = Object.keys( quizQuestion ).length - 2;
-    console.log( "keysNum", keysNum );
-    var headerText = document.querySelector( "#header_text" );
-    var answerField = document.querySelector( "#answer_field" );
     // Empty array will hold all our answers.
     var answersArray = [];
 
@@ -31,7 +35,6 @@ function displayQuestion( index ) {
     for ( var i = 0; i < keysNum; i++ ) {
         answersArray.push( quizQuestion[ i ] );
     }
-    console.log( "answersArray after for loop", answersArray );
 
     // We start on answer #1.
     var answerNum = 0;
@@ -49,7 +52,7 @@ function displayQuestion( index ) {
             evalAnswer( e.target.getAttribute( "data-index" ) === quizQuestion.a, 15 );
             index++;
             if ( index >= quizQuestionsArr.length ) {
-                console.log( `No more questions, index at ${ index }` );
+                displayEndPage();
             } else {
                 displayQuestion( index );
             }
@@ -63,9 +66,6 @@ function displayQuestion( index ) {
 }
 
 function setTimer( timeSet ) {
-    var timerSection = document.querySelector( "#timer_sec" );
-    var timer = document.querySelector( "#time" );
-
     timerSection.style.display = "block";
     timer.textContent = timeSet;
 
@@ -86,7 +86,6 @@ function timerPenalty( secPen ) {
 }
 
 function evalAnswer( bool, secPen ) {
-    var resultField = document.querySelector( "#question_result" );
     if ( bool ) {
         resultField.textContent = "Correct!";
         userScore++;
@@ -101,6 +100,11 @@ function evalAnswer( bool, secPen ) {
         resultField.textContent = "";
     }, 2000 );
 
+}
+
+function displayEndPage() {
+    headerText.textContent = "All done!";
+    answerField.textContent = `Your final score is ${ userScore }.`
 }
 
 setTimer( timeSet );
