@@ -13,9 +13,11 @@ function buildQuestionList() {
     return arr;
 }
 
-// Displays the chosen question in the DOM. Written to randomize the location of the answer.
-function displayQuestions( index ) {
+// Displays the chosen question in the DOM. Written to randomize the location of the answer. Also adds an event listener to all buttons to call itself for the next question/end of the quiz.
+function displayQuestion( index ) {
     var quizQuestion = quizQuestionsArr[ index ];
+    // Clear the #answer_field section div of any text or questions.
+    document.querySelector( "#answer_field" ).innerHTML = "";
     console.log( quizQuestion );
     // Get the number of keys in the quizQuestion object minus 2, since we don't care about looping through the "answer" or "question" properties. Useful in case we want to add more answers in the future.
     var keysNum = Object.keys( quizQuestion ).length - 2;
@@ -42,16 +44,20 @@ function displayQuestions( index ) {
         answerField.appendChild( newButton );
         newButton.insertAdjacentHTML('afterend', '<br>');
 
-        // Add the event listener that handles clicks when the user "answers.""
+        // Add the event listener that handles clicks when the user "answers," and calls displayQuestion again
         newButton.addEventListener( "click", function( e ) {
             evalAnswer( e.target.getAttribute( "data-index" ) === quizQuestion.a, 15 );
+            index++;
+            if ( index >= quizQuestionsArr.length ) {
+                console.log( `No more questions, index at ${ index }` );
+            } else {
+                displayQuestion( index );
+            }
         });
 
         answersArray.splice( arrIndex, 1 );
         answerNum++;
     }
-    console.log( "answersArray after while loop", answersArray );
-    console.log( `The answer is "${quizQuestion.a}"` );
 
     headerText.textContent = quizQuestion.q;
 }
@@ -71,11 +77,11 @@ function setTimer( timeSet ) {
     }, 1000 );
 }
 
-function timerPenalty( penaltySeconds ) {
+function timerPenalty( secPen ) {
     if ( timer.textContent < 15 ) {
         timer.textContent = 0;
     } else {
-        timer.textContent -= penaltySeconds;
+        timer.textContent -= secPen;
     }
 }
 
@@ -98,4 +104,4 @@ function evalAnswer( bool, secPen ) {
 }
 
 setTimer( timeSet );
-displayQuestions( 0 );
+displayQuestion( 0 );
