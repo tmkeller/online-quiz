@@ -1,5 +1,15 @@
 console.log( "functions.js successfully imported" );
+
 var timeSet = 3;
+var quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
+
+function buildQuestionList() {
+    var arr = [];
+    for ( var i = 0; i < arguments.length; i++ ) {
+        arr.push( arguments[ i ] );
+    }
+    return arr;
+}
 
 function setTimer( timeSet ) {
     var timerSection = document.querySelector( "#timer_sec" );
