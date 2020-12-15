@@ -2,6 +2,7 @@
 var timeSet = 60;
 var userScore = 0;
 var highScores = JSON.parse( localStorage.getItem( "highScores" ) ) || [];
+var gameOn = false;
 
 // Create the array of questions that we will iterate over to generate the quiz.
 const quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
@@ -37,6 +38,7 @@ function mainMenu() {
     answerField.appendChild( startQuizButton );
 
     startQuizButton.addEventListener( "click", function() {
+        gameOn = true;
         setTimer( timeSet );
         displayQuestion( 0 );
     });
@@ -90,11 +92,16 @@ function setTimer( timeSet ) {
     timerSection.style.display = "block";
     timer.textContent = timeSet;
 
-    var timerInterval = setInterval( function( e ) {
+    var timerInterval = setInterval( function() {
         timer.textContent -= 1;
         if ( timer.textContent <= 0 ) {
-            displayEndPage();
+            gameOn = false;
             addTemporaryMessage( resultField, "Game over. The timer has run out.", 3000 );
+        }
+        if ( !gameOn ) {
+            timerSection.style.display = "none";
+            timer.textContent = 0;
+            displayEndPage();
             clearInterval( timerInterval );
         }
     }, 1000 );
@@ -122,6 +129,7 @@ function evalAnswer( bool, secPen ) {
 }
 
 function displayEndPage() {
+    gameOn = false;
     headerText.textContent = "All done!";
     answerField.innerHTML = `Your final score is ${ userScore }. <br>`;
 
@@ -144,7 +152,7 @@ function displayEndPage() {
     enterInitialsSubmit.id = "submit-initials";
     enterInitialsSubmit.textContent = "Submit Score";
     playAgainButton.textContent = "Play Again!";
-    timerSection.style.display = "none";
+    // timerSection.style.display = "none";
 
     // Add all elements to answerField div.
     answerField.appendChild( enterInitialsForm );
