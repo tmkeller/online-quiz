@@ -1,6 +1,7 @@
 // Initial time remaining.
 var timeSet = 60;
 var userScore = 0;
+var highScores = JSON.parse( localStorage.getItem( "highScores" ) ) || [];
 
 // Create the array of questions that we will iterate over to generate the quiz.
 const quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
@@ -19,6 +20,12 @@ function buildQuestionList() {
         arr.push( arguments[ i ] );
     }
     return arr;
+}
+
+function mainMenu() {
+    userScore = 0;
+    setTimer( timeSet );
+    displayQuestion( 0 );
 }
 
 // Displays the chosen question in the DOM. Written to randomize the location of the answer. Also adds an event listener to all buttons to call itself for the next question/end of the quiz.
@@ -109,6 +116,8 @@ function displayEndPage() {
     var enterInitialsLabel = document.createElement( "label" );
     var enterInitialsInput = document.createElement( "input" );
     var enterInitialsSubmit = document.createElement( "button" );
+    var lineBreak = document.createElement( "br" );
+    var playAgainButton = document.createElement( "button" );
 
     // Add attributes.
     enterInitialsLabel.for = "enter";
@@ -117,12 +126,38 @@ function displayEndPage() {
     enterInitialsInput.name = "enter-initials";
     enterInitialsInput.id = "enter-initials";
     enterInitialsSubmit.id = "submit-initials";
+    enterInitialsSubmit.textContent = "Submit Score";
+    playAgainButton.textContent = "Play Again!";
+    timerSection.style.display = "none";
 
     // Add all elements to answerField div.
     answerField.appendChild( enterInitialsLabel );
     answerField.appendChild( enterInitialsInput );
     answerField.appendChild( enterInitialsSubmit );
+    answerField.appendChild( lineBreak );
+    answerField.appendChild( playAgainButton );
+
+    enterInitialsSubmit.addEventListener( "click", function() {
+        var enterInitials = document.querySelector( "#enter-initials" );
+        var userInitials = enterInitials.value;
+        if ( userInitials ) {
+            enterInitials.value = "";
+            var index = 0;
+
+            while ( highScores[0] && highScores[ index ][ 1 ] > userScore ) {
+                index++;
+            }
+
+            highScores.splice( index, 0, [ userInitials, userScore ] );
+
+            localStorage.setItem( "highScores", JSON.stringify( highScores ) );
+            /* highScoresPage() */
+        }
+    });
+
+    playAgainButton.addEventListener( "click", function() {
+        mainMenu();
+    });
 }
 
-setTimer( timeSet );
-displayQuestion( 0 );
+mainMenu();
