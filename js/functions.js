@@ -7,8 +7,8 @@ var highScores = JSON.parse( localStorage.getItem( "highScores" ) ) || [];
 const quizQuestionsArr = buildQuestionList( q1, q2, q3, q4 );
 
 // Constants hold all selectors for necessary HTML elements.
-const answerField = document.querySelector( "#answer_field" );
 const headerText = document.querySelector( "#header_text" );
+const answerField = document.querySelector( "#answer_field" );
 const resultField = document.querySelector( "#question_result" );
 const timerSection = document.querySelector( "#timer_sec" );
 const timer = document.querySelector( "#time" );
@@ -24,8 +24,20 @@ function buildQuestionList() {
 
 function mainMenu() {
     userScore = 0;
-    setTimer( timeSet );
-    displayQuestion( 0 );
+    headerText.textContent = "Epic Quiz Challenge 2020!";
+    var quizDescription = document.createElement( "p" );
+    var startQuizButton = document.createElement( "button" );
+    
+    quizDescription.textContent = "It's a quiz! Answer questions in the time remaining in the top right. Once you're done, you can see your high score and try to beat it! Good luck.";
+    startQuizButton.textContent = "Let's do this!";
+
+    answerField.appendChild( quizDescription );
+    answerField.appendChild( startQuizButton );
+
+    startQuizButton.addEventListener( "click", function() {
+        setTimer( timeSet );
+        displayQuestion( 0 );
+    });
 }
 
 // Displays the chosen question in the DOM. Written to randomize the location of the answer. Also adds an event listener to all buttons to call itself for the next question/end of the quiz.
@@ -102,7 +114,6 @@ function evalAnswer( bool, secPen ) {
     }
 
     var timerInterval = setInterval( function( e ) {
-        // Game over
         clearInterval( timerInterval );
         resultField.textContent = "";
     }, 2000 );
@@ -113,6 +124,7 @@ function displayEndPage() {
     headerText.textContent = "All done!";
     answerField.innerHTML = `Your final score is ${ userScore }. <br>`;
     // Create input and label.
+    var enterInitialsForm = document.createElement( "form" );
     var enterInitialsLabel = document.createElement( "label" );
     var enterInitialsInput = document.createElement( "input" );
     var enterInitialsSubmit = document.createElement( "button" );
@@ -120,6 +132,8 @@ function displayEndPage() {
     var playAgainButton = document.createElement( "button" );
 
     // Add attributes.
+    enterInitialsForm.id = "enter-initials-form";
+    enterInitialsForm.method = "POST";
     enterInitialsLabel.for = "enter";
     enterInitialsLabel.textContent = "Enter your name or initials: ";
     enterInitialsInput.type = "text";
@@ -131,27 +145,37 @@ function displayEndPage() {
     timerSection.style.display = "none";
 
     // Add all elements to answerField div.
-    answerField.appendChild( enterInitialsLabel );
-    answerField.appendChild( enterInitialsInput );
-    answerField.appendChild( enterInitialsSubmit );
-    answerField.appendChild( lineBreak );
+    answerField.appendChild( enterInitialsForm );
+    enterInitialsForm.appendChild( enterInitialsLabel );
+    enterInitialsForm.appendChild( enterInitialsInput );
+    enterInitialsForm.appendChild( enterInitialsSubmit );
+    enterInitialsForm.appendChild( lineBreak );
     answerField.appendChild( playAgainButton );
 
-    enterInitialsSubmit.addEventListener( "click", function() {
+    enterInitialsForm.addEventListener( "submit", function( event ) {
+        event.preventDefault();
+
         var enterInitials = document.querySelector( "#enter-initials" );
         var userInitials = enterInitials.value;
         if ( userInitials ) {
             enterInitials.value = "";
             var index = 0;
 
-            while ( highScores[0] && highScores[ index ][ 1 ] > userScore ) {
+            while ( highScores[ index ] && highScores[ index ][ 1 ] > userScore ) {
                 index++;
             }
 
             highScores.splice( index, 0, [ userInitials, userScore ] );
 
             localStorage.setItem( "highScores", JSON.stringify( highScores ) );
-            /* highScoresPage() */
+
+            resultField.textContent = "Score Submitted!";
+            var timerInterval = setInterval( function( e ) {
+
+                clearInterval( timerInterval );
+                resultField.textContent = "";
+                /* highScoresPage() */
+            }, 2000 );
         }
     });
 
