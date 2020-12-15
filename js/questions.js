@@ -1,3 +1,5 @@
+// For the sake of keeping the app code organized, I've set aside this file simply to store all the questions as their own variables.
+
 var q1 = {
     q: "A function that calls itself is _____.",
     0: "recursive",
