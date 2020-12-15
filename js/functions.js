@@ -174,7 +174,7 @@ function displayEndPage() {
 
                 clearInterval( timerInterval );
                 resultField.textContent = "";
-                /* highScoresPage() */
+                highScoresPage();
             }, 2000 );
         }
     });
@@ -182,6 +182,19 @@ function displayEndPage() {
     playAgainButton.addEventListener( "click", function() {
         mainMenu();
     });
+}
+
+function highScoresPage() {
+    headerText.textContent = "Top 5 High Scores";
+    var tenOrLess;
+    if ( highScores.length > 10 ) {
+        tenOrLess = 10;
+    } else {
+        tenOrLess = highScores.length;
+    }
+    for ( var i = 0; i < tenOrLess; i++ ) {
+        console.log( highScores[ i ][ 0 ], highScores[ i ][ 1 ] );
+    }
 }
 
 mainMenu();
