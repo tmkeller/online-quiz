@@ -25,6 +25,8 @@ function buildQuestionList() {
 function mainMenu() {
     userScore = 0;
     headerText.textContent = "Epic Quiz Challenge 2020!";
+    answerField.textContent = "";
+
     var quizDescription = document.createElement( "p" );
     var startQuizButton = document.createElement( "button" );
     
@@ -91,6 +93,8 @@ function setTimer( timeSet ) {
     var timerInterval = setInterval( function( e ) {
         timer.textContent -= 1;
         if ( timer.textContent <= 0 ) {
+            displayEndPage();
+            addTemporaryMessage( resultField, "Game over. The timer has run out.", 3000 );
             clearInterval( timerInterval );
         }
     }, 1000 );
@@ -105,24 +109,22 @@ function timerPenalty( secPen ) {
 }
 
 function evalAnswer( bool, secPen ) {
+    var evalMessage;
     if ( bool ) {
-        resultField.textContent = "Correct!";
+        evalMessage = "Correct!";
         userScore++;
     } else {
-        resultField.textContent = `Incorrect. You have been penalized ${ secPen } seconds.`;
+        evalMessage = `Incorrect. You have been penalized ${ secPen } seconds.`;
         timerPenalty( secPen );
     }
 
-    var timerInterval = setInterval( function( e ) {
-        clearInterval( timerInterval );
-        resultField.textContent = "";
-    }, 2000 );
-
+    addTemporaryMessage( resultField, evalMessage, 2000 );
 }
 
 function displayEndPage() {
     headerText.textContent = "All done!";
     answerField.innerHTML = `Your final score is ${ userScore }. <br>`;
+
     // Create input and label.
     var enterInitialsForm = document.createElement( "form" );
     var enterInitialsLabel = document.createElement( "label" );
@@ -168,14 +170,10 @@ function displayEndPage() {
             highScores.splice( index, 0, [ userInitials, userScore ] );
 
             localStorage.setItem( "highScores", JSON.stringify( highScores ) );
+            highScoresPage();
 
-            resultField.textContent = "Score Submitted!";
-            var timerInterval = setInterval( function( e ) {
-
-                clearInterval( timerInterval );
-                resultField.textContent = "";
-                highScoresPage();
-            }, 2000 );
+            var scoreSubmitted = "Score Submitted!";
+            addTemporaryMessage( resultField, scoreSubmitted, 2000 );
         }
     });
 
@@ -185,16 +183,61 @@ function displayEndPage() {
 }
 
 function highScoresPage() {
-    headerText.textContent = "Top 5 High Scores";
+    headerText.textContent = "Top 10 High Scores";
+    answerField.textContent = "";
     var tenOrLess;
+    var playAgainButton = document.createElement( "button" );
+    var clearScoresButton = document.createElement( "button" );
+    var highScoresTable = document.createElement( "table" );
+    
+    highScoresTable.setAttribute( "id", "high-scores-table" );
+    answerField.appendChild( highScoresTable );
+
     if ( highScores.length > 10 ) {
         tenOrLess = 10;
     } else {
         tenOrLess = highScores.length;
     }
     for ( var i = 0; i < tenOrLess; i++ ) {
-        console.log( highScores[ i ][ 0 ], highScores[ i ][ 1 ] );
+        var row = document.createElement( "tr" );
+        highScoresTable.appendChild( row );
+
+        var place = document.createElement( "td" );
+        var name = document.createElement( "td" );
+        var score = document.createElement( "td" );
+        place.textContent = i + 1;
+        name.textContent = highScores[ i ][ 0 ];
+        score.textContent = highScores[ i ][ 1 ];
+        row.appendChild( place );
+        row.appendChild( name );
+        row.appendChild( score );
     }
+
+    playAgainButton.textContent = "Play Again!";
+    clearScoresButton.textContent = "Clear Scores";
+    answerField.appendChild( playAgainButton );
+    answerField.appendChild( clearScoresButton );
+
+    playAgainButton.addEventListener( "click", function() {
+        mainMenu();
+    });
+
+    clearScoresButton.addEventListener( "click", function() {
+        localStorage.removeItem( "highScores" );
+        highScoresTable.textContent = "";
+    });
+}
+
+// Creates a temporary message to be displayed within a <p> tag inside a target element.
+function addTemporaryMessage( parent, message, ttl ) {
+    var messageTag = document.createElement( "p" );
+    messageTag.setAttribute( "class", "temp-message" );
+    messageTag.textContent = message;
+    parent.appendChild( messageTag );
+    var timerInterval = setInterval( function( e ) {
+        clearInterval( timerInterval );
+        messageTag.remove();
+    }, ttl );
 }
 
 mainMenu();
