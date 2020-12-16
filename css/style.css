@@ -9,6 +9,10 @@ main {
     margin: 0 auto;
 }
 
+#main_header {
+    margin-top: 70px;
+}
+
 a {
     color: #ffffff;
 }
@@ -40,6 +44,7 @@ button:hover {
 }
 
 #view_scores, #timer_sec {
+    margin-top: 3px;
     padding: 3px 6px;
     position:fixed;
     top: 0;
@@ -91,4 +96,8 @@ label {
     border-radius: 2px;
     color: white;
     text-align: center;
+}
+
+#high-scores-table td:hover {
+    background-color:rgb(165, 165, 165);
 }
