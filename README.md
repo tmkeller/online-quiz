@@ -15,7 +15,14 @@ LinkedIn: https://linkedin.com/in/tim-keller-3ab55bb1/
 
 Working from scratch, build an online quiz that stores the user's high score between sessions using the localStorage API. This app has the following attributes:
 
-* 
+* Persistent storage using localStorage, which enables a list of high scores.
+* Single page app with fast, vanilla JS-based pageloads.
+* A timer that ends the game prematurely when it runs out, and penalizes the player for wrong answers by deducting time.
+* Functions without throwing any errors to the console.
+* Easily navigable interface.
+* Dark mode for easy viewing.
+* Code design allows for easy changes to number of questions, and time limit length.
+* Question locations are randomized, making it harder for the user to remember the location of correct answers after taking the test multiple times.
 
 ## Product
 

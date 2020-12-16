@@ -147,14 +147,13 @@ function displayEndPage() {
     // If we're seeing this page, game is no longer active.
     gameOn = false;
     headerText.textContent = "All done!";
-    answerField.innerHTML = `Your final score is ${ userScore }. <br>`;
+    answerField.innerHTML = `<p>Your final score is ${ userScore } out of ${ quizQuestionsArr.length }!</p>`;
 
     // Create input and label.
     var enterInitialsForm = document.createElement( "form" );
     var enterInitialsLabel = document.createElement( "label" );
     var enterInitialsInput = document.createElement( "input" );
     var enterInitialsSubmit = document.createElement( "button" );
-    var lineBreak = document.createElement( "br" );
     var playAgainButton = document.createElement( "button" );
 
     // Add attributes.
@@ -174,7 +173,6 @@ function displayEndPage() {
     enterInitialsForm.appendChild( enterInitialsLabel );
     enterInitialsForm.appendChild( enterInitialsInput );
     enterInitialsForm.appendChild( enterInitialsSubmit );
-    enterInitialsForm.appendChild( lineBreak );
     answerField.appendChild( playAgainButton );
 
     // Event listener for submission form.
@@ -219,8 +217,19 @@ function highScoresPage() {
     var playAgainButton = document.createElement( "button" );
     var clearScoresButton = document.createElement( "button" );
     var highScoresTable = document.createElement( "table" );
+    var headerRow = document.createElement( "tr" );
+    var headerPlace = document.createElement( "th" );
+    var headerName = document.createElement( "th" );
+    var headerScore = document.createElement( "th" );
     
     highScoresTable.setAttribute( "id", "high-scores-table" );
+    headerPlace.textContent = "Place";
+    headerName.textContent = "Name";
+    headerScore.textContent = "Score";
+    headerRow.appendChild( headerPlace );
+    headerRow.appendChild( headerName );
+    headerRow.appendChild( headerScore );
+    highScoresTable.appendChild( headerRow );
     answerField.appendChild( highScoresTable );
 
     // Builds a table of the top 10 (or less) scores stored locally.
@@ -244,6 +253,8 @@ function highScoresPage() {
         row.appendChild( score );
     }
 
+    playAgainButton.setAttribute( "id", "play_again" );
+    clearScoresButton.setAttribute( "id", "clear_scores" );
     playAgainButton.textContent = "Play Again!";
     clearScoresButton.textContent = "Clear Scores";
     answerField.appendChild( playAgainButton );
@@ -256,6 +267,7 @@ function highScoresPage() {
     clearScoresButton.addEventListener( "click", function() {
         localStorage.removeItem( "highScores" );
         highScoresTable.textContent = "";
+        highScores = [];
     });
 }
 

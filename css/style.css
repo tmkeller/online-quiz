@@ -13,6 +13,32 @@ a {
     color: #ffffff;
 }
 
+button {
+    background-color: antiquewhite;
+    font-size: 16px;
+    display: block;
+    margin: 0 auto 10px auto;
+    border: 0;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+
+h1, p {
+    text-align: center;
+}
+
+#header_text {
+    font-size: 42px;
+}
+
+p {
+    font-size: 22px;
+}
+
+button:hover {
+    background-color: rgb(173, 163, 149);
+}
+
 #view_scores, #timer_sec {
     padding: 3px 6px;
     position:fixed;
@@ -27,4 +53,42 @@ a {
     display: none;
     right: 0;
     width: 140px;
+}
+
+#answer_field {
+    padding: 0 10px;
+}
+
+#high-scores-table {
+    width: 110px;
+    margin: 0px auto 32px auto;
+}
+
+label {
+    display: block;
+    margin: 0 auto 4px auto;
+    width: 176px;
+}
+
+#enter-initials {
+    display: block;
+    margin: 8px auto 40px auto;
+}
+
+#play_again, #clear_scores {
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+#high-scores-table th {
+    text-align: left;
+    padding: 2px 5px;
+}
+
+#high-scores-table td {
+    padding: 3px;
+    background-color: grey;
+    border-radius: 2px;
+    color: white;
+    text-align: center;
 }
