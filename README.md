@@ -21,8 +21,9 @@ Working from scratch, build an online quiz that stores the user's high score bet
 * Functions without throwing any errors to the console.
 * Easily navigable interface.
 * Dark mode for easy viewing.
-* Code design allows for easy changes to number of questions, and time limit length.
+* Code design allows for easy changes to number of questions and time limit length.
 * Question locations are randomized, making it harder for the user to remember the location of correct answers after taking the test multiple times.
+
 
 ## Product
 
@@ -32,9 +33,9 @@ Working from scratch, build an online quiz that stores the user's high score bet
 
 ## Technologies
 
-![javascript](https://img.shields.io/badge/javascript-39.4%25-yellow)
-![html](https://img.shields.io/badge/html-29.4%25-blue)
-![css](https://img.shields.io/badge/css-31.2%25-red)
+![javascript](https://img.shields.io/badge/javascript-85%25-yellow)
+![html](https://img.shields.io/badge/html-9.5%25-blue)
+![css](https://img.shields.io/badge/css-5.5%25-red)
 
 ## License
 
